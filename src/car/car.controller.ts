@@ -18,10 +18,12 @@ export class CarController {
             example: [
                 {
                     "id": 2,
-                    "title": "Hello",
-                    "content": "World",
-                    "published": true,
-                    "authorId": 1
+                    "model": "Audi",
+                    "year": 2005,
+                    "country": "GM",
+                    "price": 3000,
+                    "maxSpeed": 300,
+                    "ownerId": 1
                 }
             ]
         }
@@ -37,10 +39,12 @@ export class CarController {
         status: 200, schema: {
             example: {
                 "id": 2,
-                "title": "Hello",
-                "content": "World",
-                "published": true,
-                "authorId": 1
+                "model": "Audi",
+                "year": 2005,
+                "country": "GM",
+                "price": 3000,
+                "maxSpeed": 300,
+                "ownerId": 1
             }
         }
     })
@@ -55,10 +59,12 @@ export class CarController {
         status: 201, schema: {
             example: {
                 "id": 2,
-                "title": "Hello",
-                "content": "World",
-                "published": true,
-                "authorId": 1
+                "model": "Audi",
+                "year": 2005,
+                "country": "GM",
+                "price": 3000,
+                "maxSpeed": 300,
+                "ownerId": 1
             }
         }
     })
@@ -79,10 +85,12 @@ export class CarController {
         status: 200, schema: {
             example: {
                 "id": 2,
-                "title": "Hello",
-                "content": "World",
-                "published": true,
-                "authorId": 1
+                "model": "Audi",
+                "year": 2005,
+                "country": "GM",
+                "price": 3000,
+                "maxSpeed": 300,
+                "ownerId": 1
             },
         }
     })
@@ -97,10 +105,12 @@ export class CarController {
         status: 200, schema: {
             example: {
                 "id": 2,
-                "title": "Hello",
-                "content": "World",
-                "published": true,
-                "authorId": 1
+                "model": "Audi",
+                "year": 2005,
+                "country": "GM",
+                "price": 3000,
+                "maxSpeed": 300,
+                "ownerId": 1
             },
         }
     })
