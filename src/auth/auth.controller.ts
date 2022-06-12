@@ -12,10 +12,10 @@ export class AuthController {
     constructor(private authService: AuthService) {
     }
 
-    // @Post('/login')
-    // login(@Body() authDto: AuthUserDto) {
-    //     return this.authService.login(authDto);
-    // }
+    @Post('/login')
+    login(@Body() authDto: AuthUserDto) {
+        return this.authService.login(authDto);
+    }
 
     @Post('/registration')
     registration(@Body() createUserDto: CreateUserDto):Promise<any> {

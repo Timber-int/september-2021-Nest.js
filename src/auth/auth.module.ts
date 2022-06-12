@@ -1,3 +1,5 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
 import {Module} from '@nestjs/common';
 import {AuthController} from "./auth.controller";
 import {AuthService} from "./auth.service";
@@ -10,9 +12,9 @@ import {CONSTANTS} from "../constants";
     controllers: [AuthController,],
     providers: [AuthService, UserService, JwtService, PrismaService],
     imports: [JwtModule.register({
-        secret: CONSTANTS.SECRET_KEY,
+        secret: 'Secret',
         signOptions: {
-            expiresIn: CONSTANTS.EXPIRES_IN
+            expiresIn: CONSTANTS.EXPIRES_IN,
         }
     })],
     exports: [AuthService]
