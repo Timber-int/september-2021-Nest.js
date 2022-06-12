@@ -33,14 +33,18 @@ export class AuthService {
         return this._generateTokenPair(user);
     }
 
-    private async _generateTokenPair(user: User) {
+    private _generateTokenPair(user: User) {
         const {id, email, name} = user;
         const payload = {id, email, name}
 
+        const accessToken = this.jwtService.sign(payload);
+        const refreshToken = this.jwtService.sign(payload);
+
         return {
-            accessToken: this.jwtService.sign(payload),
-            refreshToken: this.jwtService.sign(payload),
+            accessToken,
+            refreshToken,
         }
+
     }
 
     private async _validateUser(authUserDto: AuthUserDto) {

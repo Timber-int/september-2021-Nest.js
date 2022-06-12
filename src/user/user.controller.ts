@@ -1,9 +1,10 @@
-import {Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put} from '@nestjs/common';
+import {Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards} from '@nestjs/common';
 import {UserService} from "./user.service";
 import {User} from "@prisma/client";
 import {CreateUserDto} from "./dto/create-user.dto";
 import {UpdateUserDto} from "./dto/update-user.dto";
 import {ApiOkResponse, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
+import { AuthGuard } from 'src/auth/jwt.auth.guard';
 
 @ApiTags('users')
 @Controller('users')
@@ -30,6 +31,7 @@ export class UserController {
     })
     @HttpCode(HttpStatus.OK)
     @Get('/')
+    @UseGuards(AuthGuard)
     getAllUsers(): Promise<User[]> {
         return this.userService.getAllUsers();
     }
