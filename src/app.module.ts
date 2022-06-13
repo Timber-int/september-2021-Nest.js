@@ -7,11 +7,12 @@ import { PostModule } from './post/post.module';
 import { CommentModule } from './comment/comment.module';
 import { CarModule } from './car/car.module';
 import { AuthModule } from './auth/auth.module';
+import { TokenService } from './token/token.service';
 
 @Module({
     imports: [UserModule, PostModule, CommentModule, CarModule, AuthModule,],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [AppService, TokenService],
 })
 export class AppModule {
 }

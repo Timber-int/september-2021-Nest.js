@@ -92,6 +92,7 @@ export class UserController {
     })
     @HttpCode(HttpStatus.OK)
     @Put('/:id')
+    @UseGuards(AuthGuard)
     updateUserById(@Body() userDataToUpdate: UpdateUserDto, @Param('id') id: string): Promise<User> {
         return this.userService.updateUserById(userDataToUpdate, Number(id));
     }
@@ -112,6 +113,7 @@ export class UserController {
     })
     @HttpCode(HttpStatus.OK)
     @Delete('/:id')
+    @UseGuards(AuthGuard)
     deleteUserById(@Param('id') id: string): Promise<User> {
         return this.userService.deleteUserById(Number(id));
     }

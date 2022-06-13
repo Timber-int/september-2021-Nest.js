@@ -21,6 +21,7 @@ model User {
   posts    PostContent[]
   comments Comment[]
   car      Car?
+  token    Token?
 }
 
 model PostContent {
@@ -53,5 +54,12 @@ model Car {
   maxSpeed Int
   owner    User?  @relation(fields: [ownerId], references: [id])
   ownerId  Int?   @unique
+}
 
+model Token {
+  id           Int    @id @default(autoincrement())
+  accessToken  String
+  refreshToken String
+  user         User?  @relation(fields: [userId], references: [id])
+  userId       Int?   @unique
 }

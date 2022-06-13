@@ -6,19 +6,24 @@ import {UserService} from "../user/user.service";
 import {CONSTANTS} from "../constants";
 import {User} from "@prisma/client";
 import {AuthUserDto} from "./dto/auth.user.dto";
+import {PrismaService} from "../core/prisma.service";
+import {IToken} from "./interface/tokenInterface";
 
 @Injectable()
 export class AuthService {
 
-    constructor(private jwtService: JwtService, private userService: UserService) {
+    constructor(private jwtService: JwtService, private userService: UserService, private prismaService: PrismaService) {
     }
 
-    async login(authDto: AuthUserDto) {
+    async login(authDto: AuthUserDto): Promise<Promise<IToken>> {
         const user = await this._validateUser(authDto);
-        return this._generateTokenPair(user);
+        const tokenPair = await this._generateTokenPair(user);
+        const {accessToken, refreshToken, userId} = tokenPair;
+        await this._saveTokenPairToDB(accessToken, refreshToken, userId);
+        return tokenPair;
     }
 
-    async registration(userDto: CreateUserDto): Promise<any> {
+    async registration(userDto: CreateUserDto): Promise<Promise<IToken>> {
         const userFromDB = await this.userService.getUserByEmail(userDto.email)
 
         if (userFromDB) {
@@ -30,10 +35,13 @@ export class AuthService {
 
         const user = await this.userService.createUser(userWithHashPassword)
 
-        return this._generateTokenPair(user);
+        const tokenPair = await this._generateTokenPair(user);
+        const {accessToken, refreshToken, userId} = tokenPair;
+        await this._saveTokenPairToDB(accessToken, refreshToken, userId);
+        return tokenPair
     }
 
-    private _generateTokenPair(user: User) {
+    private _generateTokenPair(user: User): IToken {
         const {id, email, name} = user;
         const payload = {id, email, name}
 
@@ -43,6 +51,7 @@ export class AuthService {
         return {
             accessToken,
             refreshToken,
+            userId: id,
         }
 
     }
@@ -62,6 +71,19 @@ export class AuthService {
         }
 
         throw new UnauthorizedException({message: 'Wrong email or password'});
+    }
+
+    private async _saveTokenPairToDB(accessToken: string, refreshToken: string, userId: number): Promise<IToken> {
+        const tokenFromDB = await this.prismaService.token.findUnique({where: {userId}});
+
+        if (tokenFromDB) {
+            return this.prismaService.token.update({
+                where: {userId},
+                data: {accessToken: accessToken, refreshToken: refreshToken}
+            })
+        }
+
+        return this.prismaService.token.create({data: {accessToken, refreshToken, userId}});
     }
 
 }
