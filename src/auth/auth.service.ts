@@ -86,4 +86,22 @@ export class AuthService {
         return this.prismaService.token.create({data: {accessToken, refreshToken, userId}});
     }
 
+    async getVerifiedUseId(jwt: string): Promise<string | null> {
+        try {
+            const token = this.getTokenFromJwt(jwt);
+            const user = await this.jwtService.verify(token, {
+                publicKey: 'Secret',
+            });
+
+            return user.id;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    private getTokenFromJwt(jwt:string) {
+        return jwt.split(' ')[1]
+    }
+
+
 }

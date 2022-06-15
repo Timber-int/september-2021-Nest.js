@@ -1,10 +1,25 @@
-import {Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards} from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Param,
+    Post,
+    Put, Res, UploadedFile,
+    UseGuards,
+    UseInterceptors
+} from '@nestjs/common';
 import {UserService} from "./user.service";
 import {User} from "@prisma/client";
 import {CreateUserDto} from "./dto/create-user.dto";
 import {UpdateUserDto} from "./dto/update-user.dto";
 import {ApiOkResponse, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
-import { AuthGuard } from 'src/auth/jwt.auth.guard';
+import {AuthGuard} from 'src/auth/jwt.auth.guard';
+import {FileInterceptor} from '@nestjs/platform-express/multer';
+import {diskStorage} from "multer";
+import {imageFileFilter} from "../utils/image.filter";
 
 @ApiTags('users')
 @Controller('users')
@@ -93,8 +108,47 @@ export class UserController {
     @HttpCode(HttpStatus.OK)
     @Put('/:id')
     @UseGuards(AuthGuard)
-    updateUserById(@Body() userDataToUpdate: UpdateUserDto, @Param('id') id: string): Promise<User> {
-        return this.userService.updateUserById(userDataToUpdate, Number(id));
+    @UseInterceptors(
+        FileInterceptor('avatar', {
+            storage: diskStorage({
+                destination: './avatar',
+                filename: (req, file, cb) => {
+                    const randomName = Array(32)
+                        .fill(null)
+                        .map(() => Math.round(Math.random() * 16).toString(16))
+                        .join('');
+
+                    return cb(null, `${randomName}${file.originalname}`);
+                },
+            }),
+            fileFilter: imageFileFilter,
+        }),
+    )
+    updateUser(
+        @Body() userData: UpdateUserDto,
+        @Param('id') id: string,
+        @UploadedFile() avatar: Express.Multer.File,
+    ) {
+        let newAvatarPath: string = null;
+        try {
+            if (avatar) {
+                const randomName = Array(32)
+                    .fill(null)
+                    .map(() => Math.round(Math.random() * 16).toString(16))
+                    .join('');
+
+                newAvatarPath = `avatar/${randomName}${avatar.originalname}`;
+            }
+
+            userData.avatar = newAvatarPath;
+            return this.userService.updateUserById(userData, Number(id));
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    @Get('/avatar/:image')
+    watchFile(@Param('image') image, @Res() res) {
+        return res.sendFile(image, { root: './avatar' });
     }
 
     @ApiOperation({summary: 'Delete user'})

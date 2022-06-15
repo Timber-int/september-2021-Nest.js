@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {PrismaService} from "../core/prisma.service";
 import {Prisma, Car} from "@prisma/client";
+import {CreateCarDto} from "./dto/create-car.dto";
 
 @Injectable()
 export class CarService {
@@ -15,7 +16,7 @@ export class CarService {
         return this.prismaService.car.findUnique({where: {id: carId}});
     }
 
-    createCar(carBody: Prisma.CarCreateInput): Promise<Car> {
+    createCar(carBody: Prisma.CarUncheckedCreateInput): Promise<Car> {
         return this.prismaService.car.create({data: carBody});
     }
 

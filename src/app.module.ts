@@ -8,9 +8,10 @@ import { CommentModule } from './comment/comment.module';
 import { CarModule } from './car/car.module';
 import { AuthModule } from './auth/auth.module';
 import { TokenService } from './token/token.service';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
-    imports: [UserModule, PostModule, CommentModule, CarModule, AuthModule,],
+    imports: [UserModule, PostModule, CommentModule, CarModule, AuthModule, ChatModule,],
     controllers: [AppController],
     providers: [AppService, TokenService],
 })

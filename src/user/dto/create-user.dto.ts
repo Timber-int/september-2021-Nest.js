@@ -1,4 +1,4 @@
-import {IsBoolean, IsEmail, IsNotEmpty, IsNumber, IsString, Matches, Max, Min} from "class-validator";
+import {IsBoolean, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, Matches, Max, Min} from "class-validator";
 import {RegEx} from "../../constants";
 
 export class CreateUserDto {
@@ -25,4 +25,9 @@ export class CreateUserDto {
 
     @IsBoolean()
     public status: boolean;
+
+    @IsString()
+    @IsOptional()
+    public avatar?: string;
+
 }

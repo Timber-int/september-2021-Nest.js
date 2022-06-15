@@ -3,28 +3,29 @@ import {RegEx} from "../../constants";
 
 export class CreateCarDto {
     @Matches(RegEx.NAME_REGEX)
-    model: string;
+    public model: string;
 
     @IsNumber()
     @Min(1990)
     @Max(new Date().getFullYear())
-    year: number;
+    public year: number;
 
     @IsString()
     @MinLength(2)
     @MaxLength(20)
-    country: string;
+    public country: string;
 
     @IsNumber()
     @Min(1000)
     @Max(1000000)
-    price: number;
+    public price: number;
 
     @IsNumber()
     @Min(0)
     @Max(400)
-    maxSpeed: number;
+    public maxSpeed: number;
 
     @IsNumber()
-    ownerId: number;
+    public ownerId: number;
+
 }

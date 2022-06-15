@@ -27,11 +27,12 @@ export class UserService {
     updateUserById(userDataToUpdate: Prisma.UserUpdateInput, userId: number): Promise<User> {
         return this.prismaService.user.update({
             where: {id: userId},
-            data: {name: userDataToUpdate.name, city: userDataToUpdate.city, age: userDataToUpdate.age}
+            data: {name: userDataToUpdate.name, city: userDataToUpdate.city, avatar: userDataToUpdate.avatar}
         })
     }
 
     deleteUserById(userId: number): Promise<User> {
         return this.prismaService.user.delete({where: {id: userId}})
     }
+
 }
